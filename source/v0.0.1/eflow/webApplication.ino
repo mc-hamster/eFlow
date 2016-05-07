@@ -5,7 +5,7 @@ void handleExternalScriptJS() {
 //  digitalWrite ( ledHTTP, 1 );
 
 
-  String externJavascriptString = "\n"
+  String externJavascriptString = F("\n"
                                   "function validateForm () { \n"
                                   "  var x = document.forms['myForm']['password'].value;\n"
                                   "  if (x == null || x == '') {\n"
@@ -30,7 +30,7 @@ void handleExternalScriptJS() {
                                   "a._data=this._data.clone();return a},_minBufferSize:0});j.Hasher=k.extend({cfg:f.extend(),init:function(a){this.cfg=this.cfg.extend(a);this.reset()},reset:function(){k.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);return this._doFinalize()},blockSize:16,_createHelper:function(a){return function(c,b){return(new a.init(b)).finalize(c)}},_createHmacHelper:function(a){return function(b,f){return(new s.HMAC.init(a,\n"
                                   "f)).finalize(b)}}});var s=p.algo={};return p}(Math);\n"
                                   "(function(){var e=CryptoJS,m=e.lib,p=m.WordArray,j=m.Hasher,l=[],m=e.algo.SHA1=j.extend({_doReset:function(){this._hash=new p.init([1732584193,4023233417,2562383102,271733878,3285377520])},_doProcessBlock:function(f,n){for(var b=this._hash.words,h=b[0],g=b[1],e=b[2],k=b[3],j=b[4],a=0;80>a;a++){if(16>a)l[a]=f[n+a]|0;else{var c=l[a-3]^l[a-8]^l[a-14]^l[a-16];l[a]=c<<1|c>>>31}c=(h<<5|h>>>27)+j+l[a];c=20>a?c+((g&e|~g&k)+1518500249):40>a?c+((g^e^k)+1859775393):60>a?c+((g&e|g&k|e&k)-1894007588):c+((g^e^\n"
-                                  "k)-899497514);j=k;k=e;e=g<<30|g>>>2;g=h;h=c}b[0]=b[0]+h|0;b[1]=b[1]+g|0;b[2]=b[2]+e|0;b[3]=b[3]+k|0;b[4]=b[4]+j|0},_doFinalize:function(){var f=this._data,e=f.words,b=8*this._nDataBytes,h=8*f.sigBytes;e[h>>>5]|=128<<24-h%32;e[(h+64>>>9<<4)+14]=Math.floor(b/4294967296);e[(h+64>>>9<<4)+15]=b;f.sigBytes=4*e.length;this._process();return this._hash},clone:function(){var e=j.clone.call(this);e._hash=this._hash.clone();return e}});e.SHA1=j._createHelper(m);e.HmacSHA1=j._createHmacHelper(m)})();";
+                                  "k)-899497514);j=k;k=e;e=g<<30|g>>>2;g=h;h=c}b[0]=b[0]+h|0;b[1]=b[1]+g|0;b[2]=b[2]+e|0;b[3]=b[3]+k|0;b[4]=b[4]+j|0},_doFinalize:function(){var f=this._data,e=f.words,b=8*this._nDataBytes,h=8*f.sigBytes;e[h>>>5]|=128<<24-h%32;e[(h+64>>>9<<4)+14]=Math.floor(b/4294967296);e[(h+64>>>9<<4)+15]=b;f.sigBytes=4*e.length;this._process();return this._hash},clone:function(){var e=j.clone.call(this);e._hash=this._hash.clone();return e}});e.SHA1=j._createHelper(m);e.HmacSHA1=j._createHmacHelper(m)})();");
 
 
 
@@ -327,109 +327,109 @@ void handleCSS () {
   //digitalWrite ( ledHTTP, 1 );
 
   String message = "";
-  message += "@charset \"UTF-8\";\n";
-  message += "body {\n";
-  message += "background-color: #FFFFCC;\n";
-  message += "font-family: Arial, Helvetica, sans-serif;\n";
-  message += "font-size: 12px;\n";
-  message += "line-height: 24px;\n";
-  message += "color: #333333;\n";
-  message += "}\n";
-  message += "td, th {\n";
-  message += "font-family: Arial, Helvetica, sans-serif;\n";
-  message += "font-size: 12px;\n";
-  message += "line-height: 24px;\n";
-  message += "color: #330000;\n";
-  message += "}\n";
-  message += "a {\n";
-  message += "color: #330000;\n";
-  message += "}\n";
-  message += "form {\n";
-  message += "background-color: #CCCC99;\n";
-  message += "}\n";
-  message += ".title {\n";
-  message += "font-family: Georgia, \"Times New Roman\", Times, serif;\n";
-  message += "font-size: 18px;\n";
-  message += "line-height: 30px;\n";
-  message += "background-color: #990000; color: #FFFF66;\n";
-  message += "}\n";
-  message += ".subtitle {\n";
-  message += "font-family: Georgia, \"Times New Roman\", Times, serif;\n";
-  message += "font-size: 16px;\n";
-  message += "line-height: 20px;\n";
-  message += "font-weight: bold;\n";
-  message += "color: #660000; font-style: oblique;\n";
-  message += "}\n";
-  message += ".header {\n";
-  message += "font-family: Georgia, \"Times New Roman\", Times, serif;\n";
-  message += "font-size: 24px;\n";
-  message += "background-color: #990000;\n";
-  message += "color: #FFFF66;\n";
-  message += "}\n";
-  message += ".nav {\n";
-  message += "font-family: Georgia, \"Times New Roman\", Times, serif;\n";
-  message += "font-size: 12px;\n";
-  message += "font-weight: bold;\n";
-  message += "background-color: #CCCC66;\n";
-  message += "}\n";
-  message += ".navLink {\n";
-  message += "font-family: Arial, Helvetica, sans-serif;\n";
-  message += "font-size: 14px;\n";
-  message += "font-weight: bold;\n";
-  message += "background-color: #DEDECA;\n";
-  message += "}\n";
-  message += "a:hover {\n";
-  message += "color: #DEDECA;\n";
-  message += "background-color: #330000;\n";
-  message += "}\n";
-  message += ".sidebar {\n";
-  message += "font-family: Georgia, \"Times New Roman\", Times, serif;\n";
-  message += "font-size: 12px;\n";
-  message += "line-height: 18px;\n";
-  message += "padding: 3px;\n";
-  message += "background-color: #FFFF99;\n";
-  message += "}\n";
-  message += ".sidebarHeader {\n";
-  message += "font-family: Georgia, \"Times New Roman\", Times, serif;\n";
-  message += "font-size: 14px;\n";
-  message += "line-height: 18px;\n";
-  message += "color: #FFFF99;\n";
-  message += "background-color: #999933;\n";
-  message += "font-weight: bold;\n";
+  message += F("@charset \"UTF-8\";\n");
+  message += F("body {\n");
+  message += F("background-color: #FFFFCC;\n");
+  message += F("font-family: Arial, Helvetica, sans-serif;\n");
+  message += F("font-size: 12px;\n");
+  message += F("line-height: 24px;\n");
+  message += F("color: #333333;\n");
+  message += F("}\n");
+  message += F("td, th {\n");
+  message += F("font-family: Arial, Helvetica, sans-serif;\n");
+  message += F("font-size: 12px;\n");
+  message += F("line-height: 24px;\n");
+  message += F("color: #330000;\n");
+  message += F("}\n");
+  message += F("a {\n");
+  message += F("color: #330000;\n");
+  message += F("}\n");
+  message += F("form {\n");
+  message += F("background-color: #CCCC99;\n");
+  message += F("}\n");
+  message += F(".title {\n");
+  message += F("font-family: Georgia, \"Times New Roman\", Times, serif;\n");
+  message += F("font-size: 18px;\n");
+  message += F("line-height: 30px;\n");
+  message += F("background-color: #990000; color: #FFFF66;\n");
+  message += F("}\n");
+  message += F(".subtitle {\n");
+  message += F("font-family: Georgia, \"Times New Roman\", Times, serif;\n");
+  message += F("font-size: 16px;\n");
+  message += F("line-height: 20px;\n");
+  message += F("font-weight: bold;\n");
+  message += F("color: #660000; font-style: oblique;\n");
+  message += F("}\n");
+  message += F(".header {\n");
+  message += F("font-family: Georgia, \"Times New Roman\", Times, serif;\n");
+  message += F("font-size: 24px;\n");
+  message += F("background-color: #990000;\n");
+  message += F("color: #FFFF66;\n");
+  message += F("}\n");
+  message += F(".nav {\n");
+  message += F("font-family: Georgia, \"Times New Roman\", Times, serif;\n");
+  message += F("font-size: 12px;\n");
+  message += F("font-weight: bold;\n");
+  message += F("background-color: #CCCC66;\n");
+  message += F("}\n");
+  message += F(".navLink {\n");
+  message += F("font-family: Arial, Helvetica, sans-serif;\n");
+  message += F("font-size: 14px;\n");
+  message += F("font-weight: bold;\n");
+  message += F("background-color: #DEDECA;\n");
+  message += F("}\n");
+  message += F("a:hover {\n");
+  message += F("color: #DEDECA;\n");
+  message += F("background-color: #330000;\n");
+  message += F("}\n");
+  message += F(".sidebar {\n");
+  message += F("font-family: Georgia, \"Times New Roman\", Times, serif;\n");
+  message += F("font-size: 12px;\n");
+  message += F("line-height: 18px;\n");
+  message += F("padding: 3px;\n");
+  message += F("background-color: #FFFF99;\n");
+  message += F("}\n");
+  message += F(".sidebarHeader {\n");
+  message += F("font-family: Georgia, \"Times New Roman\", Times, serif;\n");
+  message += F("font-size: 14px;\n");
+  message += F("line-height: 18px;\n");
+  message += F("color: #FFFF99;\n");
+  message += F("background-color: #999933;\n");
+  message += F("font-weight: bold;\n");
 
-  //server.sendHeader ( "ETag", "CacheThisForever", 0 );
-  //server.sendHeader ( "Expires", "Mon, 08 Jun 2035 00:19:36 GMT", 0 );
-  //server.sendHeader ( "Cache-Control", "public, max-age=31536000", 0 ); // 31536000 = 1 year
+  server.sendHeader ( "ETag", "CacheThisForever", 0 );
+  server.sendHeader ( "Expires", "Mon, 08 Jun 2035 00:19:36 GMT", 0 );
+  server.sendHeader ( "Cache-Control", "public, max-age=31536000", 0 ); // 31536000 = 1 year
 
-  //server.send ( 200, "text/css", message );
-  sendMime ( "text/css", message );
+  server.send ( 200, "text/css", message );
+  //sendMime ( "text/css", message );
 
   //digitalWrite ( ledHTTP, 0 );
 }
 
 void handleReflowNav() {
-  String message = "\n\n";
-  message += "<html>\n";
-  message += " <head>\n";
-  message += "  <meta name='viewport' content='initial-scale=1.5, user-scalable=no'>\n";
-  message += "  <link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\">\n";
-  message += "  <title>eFlow -- Main Menu</title>\n";
-  message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
-  message += "</head>\n";
-  message += "<body>\n";
+  String message = F("\n\n");
+  message += F("<html>\n");
+  message += F(" <head>\n");
+  message += F("  <meta name='viewport' content='initial-scale=1.5, user-scalable=no'>\n");
+  message += F("  <link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\">\n");
+  message += F("  <title>eFlow -- Main Menu</title>\n");
+  message += F("  <link rel=\"stylesheet\" href=\"/eflow.css\">\n");
+  message += F("</head>\n");
+  message += F("<body>\n");
 
-  message += "  <table width='100%' height='100%' border='0' cellspacing='0' cellpadding='0'><tr><td width=200><font size=+3><b>eFlow v0.01</b></font></td><td align='center' valign='middle'>\n";
-  message += "  <font size=+3>\n";
-  message += "  <a href=/process/conf target=bottom>Setup</a> | \n";
-  message += "  <a href=/process/start target=bottom>Start</a> | \n";
-  message += "  <a href=/process/stop target=bottom>Abort</a> | \n";
-  message += "  <a href=/process/chart target=bottom>Monitor Progress</a> | \n";
-  message += "  <a href=/process/data.csv target=bottom>Data</a>\n";
+  message += F("  <table width='100%' height='100%' border='0' cellspacing='0' cellpadding='0'><tr><td width=200><font size=+3><b>eFlow v0.01</b></font></td><td align='center' valign='middle'>\n");
+  message += F("  <font size=+3>\n");
+  message += F("  <a href=/process/conf target=bottom>Setup</a> | \n");
+  message += F("  <a href=/process/start target=bottom>Start</a> | \n");
+  message += F("  <a href=/process/stop target=bottom>Abort</a> | \n");
+  message += F("  <a href=/process/chart target=bottom>Monitor Progress</a> | \n");
+  message += F("  <a href=/process/data.csv target=bottom>Data</a>\n");
   
-  message += "  </font>\n";
-  message += "  </td></tr></table>\n";
-  message += "</body>\n";
-  message += "</html>\n";
+  message += F("  </font>\n");
+  message += F("  </td></tr></table>\n");
+  message += F("</body>\n");
+  message += F("</html>\n");
 
 
   server.send( 200, "text/html", message );

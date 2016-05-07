@@ -8428,6 +8428,9 @@ will be further integrated into the Sparkfun Library for other footprints.  It c
 <text x="121.92" y="48.26" size="1.778" layer="95">GPIO0</text>
 <text x="121.92" y="45.72" size="1.778" layer="95">GPIO2</text>
 <text x="121.92" y="30.48" size="1.778" layer="95">GPIO15</text>
+<text x="162.56" y="35.56" size="1.778" layer="95">J1</text>
+<text x="205.74" y="86.36" size="1.778" layer="95">J2</text>
+<text x="205.74" y="58.42" size="1.778" layer="95">J3</text>
 </plain>
 <instances>
 <instance part="JP1" gate="A" x="43.18" y="38.1"/>
@@ -8435,9 +8438,9 @@ will be further integrated into the Sparkfun Library for other footprints.  It c
 <instance part="+3V33" gate="G$1" x="111.76" y="63.5"/>
 <instance part="P+1" gate="1" x="45.72" y="68.58"/>
 <instance part="GND1" gate="1" x="48.26" y="0"/>
-<instance part="C1" gate="G$1" x="99.06" y="86.36"/>
-<instance part="+3V31" gate="G$1" x="99.06" y="91.44"/>
-<instance part="GND2" gate="1" x="99.06" y="78.74"/>
+<instance part="C1" gate="G$1" x="96.52" y="86.36"/>
+<instance part="+3V31" gate="G$1" x="96.52" y="91.44"/>
+<instance part="GND2" gate="1" x="96.52" y="78.74"/>
 <instance part="R3" gate="G$1" x="91.44" y="53.34"/>
 <instance part="R4" gate="G$1" x="96.52" y="43.18"/>
 <instance part="D1" gate="G$1" x="78.74" y="53.34" rot="R270"/>
@@ -8467,11 +8470,11 @@ will be further integrated into the Sparkfun Library for other footprints.  It c
 <instance part="JP2" gate="G$1" x="60.96" y="58.42"/>
 <instance part="JP3" gate="G$1" x="60.96" y="40.64"/>
 <instance part="C2" gate="G$1" x="106.68" y="86.36"/>
-<instance part="C3" gate="G$1" x="114.3" y="86.36"/>
+<instance part="C3" gate="G$1" x="116.84" y="86.36"/>
 <instance part="+3V32" gate="G$1" x="106.68" y="91.44"/>
-<instance part="+3V34" gate="G$1" x="114.3" y="91.44"/>
+<instance part="+3V34" gate="G$1" x="116.84" y="91.44"/>
 <instance part="GND3" gate="1" x="106.68" y="78.74"/>
-<instance part="GND4" gate="1" x="114.3" y="78.74"/>
+<instance part="GND4" gate="1" x="116.84" y="78.74"/>
 <instance part="R2" gate="G$1" x="88.9" y="60.96"/>
 <instance part="R1" gate="G$1" x="86.36" y="48.26"/>
 <instance part="JP5" gate="G$1" x="116.84" y="7.62"/>

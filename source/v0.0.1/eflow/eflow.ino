@@ -17,7 +17,6 @@
 
 #include <SPI.h>
 #include <PID_v1.h>
-//#include <PID_AutoTune_v0.h>
 #include "Jm_MAX31855.h"
 
 #include <ESP8266WiFi.h>
@@ -30,7 +29,11 @@
 #include "EEPROMAnything.h"
 
 // Configuration Start
-const uint8_t noteLength = 32;
+
+// These buttons are exposed on the nodemcu dev board
+const int key_user = 16; // What can we do with this button?
+const int key_flash = 0; // If pressed within 5 seconds of power on, enter admin mode
+// End Pin Assignment
 
 
 // This structure should not grow larger than 1024 bytes.
@@ -166,13 +169,11 @@ void setup() {
 
   Serial.begin(115200);
 
-  
-  
-
   EEPROM.begin(1024); // 512 bytes should be more than enough (famous last words)
   loadSettings();
 
-  pinMode(SSR_OUTPUT, OUTPUT);
+  pinMode( SSR_OUTPUT, OUTPUT);
+  pinMode( key_flash, INPUT_PULLUP );
 
   //-- Start PID Setup
   windowStartTime = millis();
@@ -184,12 +185,20 @@ void setup() {
   myPID.SetOutputLimits(0, WindowSize);
   //-- END PID Setup
 
-
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
 
-  //loadDefaults();
 
+  delay(5000);
+  // Set deviceAdmin to one if key_flash is depressed. Otherwise, use defaults.
+  if (digitalRead( key_flash ) == 0) {
+    deviceAdmin = 1;
+    pinMode( key_flash, OUTPUT );
+  } else {
+    pinMode( key_flash, OUTPUT );
+  }
+
+  
   if (deviceAdmin) {
     WiFi.mode(WIFI_AP);
     WiFi.softAP("eflow_admin", "eflow_admin");

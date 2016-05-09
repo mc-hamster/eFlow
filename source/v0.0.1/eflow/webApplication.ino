@@ -258,16 +258,17 @@ void handleSystemRestart() {
 
   String message = "";
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
-  message += "<meta http-equiv=\"refresh\" content=\"10; url=/process/chart\">\n";
-  message += "Rebooting... This page will refresh in 10 seconds\n";
+  message += "<meta http-equiv=\"refresh\" content=\"20; url=/process/chart\">\n";
+  message += "Rebooting... This page will refresh in 20 seconds\n";
 
   server.send ( 200, "text/html", message );
 
   processStop();
 
-  //delay(1000);
+  delay(5000);
 
-  ESP.restart();
+  //ESP.restart(); // For some reason the restart function isn't working.
+  while (1) { };   // Let's force the watchdog to restart eFlow.
 
 
 }

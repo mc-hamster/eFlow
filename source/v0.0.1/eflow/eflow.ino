@@ -31,8 +31,14 @@
 // Configuration Start
 
 // These buttons are exposed on the nodemcu dev board
-const int key_user = 16; // What can we do with this button?
-const int key_flash = 0; // If pressed within 5 seconds of power on, enter admin mode
+const uint8_t key_user = 16; // What can we do with this button?
+const uint8_t key_flash = 0; // If pressed within 5 seconds of power on, enter admin mode
+
+const uint8_t ledHTTP = 0;     // Toggled on HTTP Status
+const uint8_t ledCONNECTED = 2; // Toggled on when AP connected
+
+const uint8_t SSR_OUTPUT = 13; // This is where the SSR is connected
+
 // End Pin Assignment
 
 
@@ -71,8 +77,6 @@ unsigned long secretRandNumber; // We will generate a new secret on startup.
 #define CS_A       12
 #define CS_B       14
 #define CLK        5
-
-#define SSR_OUTPUT 13
 
 Jm_MAX31855 thermocouple_A(CLK, CS_A, DO);
 Jm_MAX31855 thermocouple_B(CLK, CS_B, DO);
@@ -265,7 +269,7 @@ void setup() {
       Serial.print ( "." );
     }
 
-    //digitalWrite ( ledCONNECTED, 1 );
+    digitalWrite ( ledCONNECTED, 1 );
 
     WiFi.printDiag(Serial);
 
@@ -317,9 +321,6 @@ void loop() {
   // Call the timer dispatchers
   dispatchers();
 
-  
-  //processGo();
-
   // Start Pid Control
   Input = (sensorA + sensorB) / 2;
 
@@ -329,10 +330,29 @@ void loop() {
   server.handleClient();
   dnsServer.processNextRequest();
 
-  
-  //delay(1);
 
 
+  if (deviceAdmin) {
+    unsigned long ledHTTPCurrentMills = millis();
+
+    if (ledHTTPCurrentMills - ledHTTPStateMills > ledHTTPStateInterval) {
+      ledHTTPStateMills = ledHTTPCurrentMills;
+
+      if (ledHTTPState) {
+        ledHTTPState = 0;
+      } else {
+        ledHTTPState = 1;
+      }
+      digitalWrite( ledCONNECTED, ledHTTPState );
+      //Serial.println ( WiFi.softAPIP() );
+    }
+
+    // If we've been in admin mode for 30 minutes, reboot ESP to get out of
+    //   admin mode.
+    if (millis() > 1800000) {
+      ESP.reset();
+    }
+  }
 
 
 

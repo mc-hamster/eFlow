@@ -1,13 +1,6 @@
 
 void dispatch100ms( void ) {
 
-  /*
-  if (Output > WindowSize / 4) {
-    digitalWrite(SSR_OUTPUT, 1);
-  } else {
-    digitalWrite(SSR_OUTPUT, 0);
-  }
-  */
   if (processEnable) { // If process is enabled, begin the reflow.
     
     if (heaterDutyIndex == -1) {

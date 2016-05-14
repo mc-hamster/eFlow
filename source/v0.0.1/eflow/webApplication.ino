@@ -2,7 +2,7 @@
 //char tempArray[5000];
 
 void handleExternalScriptJS() {
-//  digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
 
   String externJavascriptString = F("\n"
@@ -48,25 +48,25 @@ void handleExternalScriptJS() {
     server.send ( 200, "text/plain", externJavascriptString );
   }
 
-  //digitalWrite ( ledHTTP, 0 );
+  digitalWrite ( ledHTTP, 0 );
 }
 
 
 
 void handleRoot() {
-  //digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
   message += "Welcome to eFlow\n";
 
   server.send ( 200, "text/html", message );
-  //digitalWrite ( ledHTTP, 0 );
+  digitalWrite ( ledHTTP, 0 );
 
 }
 
 
 void handleProcessStart() {
-  //digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
   message += "<meta http-equiv=\"refresh\" content=\"1; url=/process/chart\">\n";
@@ -74,7 +74,7 @@ void handleProcessStart() {
   message += "Reflow process has been initiated... This page will refresh\n";
 
   server.send ( 200, "text/html", message );
-  //digitalWrite ( ledHTTP, 0 );
+  digitalWrite ( ledHTTP, 0 );
   systemMessage = "eFlow Initiated";
 
   processGo();
@@ -83,7 +83,7 @@ void handleProcessStart() {
 
 
 void handleProcessConfigure() {
-  //digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
   message += "<html xmlns='http://www.w3.org/1999/xhtml'>\n";
@@ -93,6 +93,7 @@ void handleProcessConfigure() {
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
   message += "</head>\n";
   message += "<body>\n";
+/*
   message += "<form action='' method='post' name='form1' target='_self' id='form1'>\n";
   message += "  <h1>Configure Profile</h2>\n";
   message += "  <h2>Select Solder Compounde</h2>\n";
@@ -109,6 +110,7 @@ void handleProcessConfigure() {
   }
   message += "    </select>\n";
   message += "  </p>\n";
+*/
   message += "  <h2>Modify Profile</h2>\n";
   message += "  <table width='100%' border='1' cellspacing='0' cellpadding='0'>\n";
   message += "    <tr>\n";
@@ -201,7 +203,7 @@ void handleProcessConfigure() {
 
 
   server.send ( 200, "text/html", message );
-  //digitalWrite ( ledHTTP, 0 );
+  digitalWrite ( ledHTTP, 0 );
 
   //processGo();
 
@@ -236,7 +238,7 @@ void handleProcessConfigureSaveGlobal() {
 }
 
 void handleProcessStop() {
-  //digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
@@ -244,17 +246,18 @@ void handleProcessStop() {
   message += "Process aborted... This page will refresh\n";
 
   server.send ( 200, "text/html", message );
-  //digitalWrite ( ledHTTP, 0 );
+  digitalWrite ( ledHTTP, 0 );
 
   systemMessage = "eFlow Aborted";
 
   processStop();
+  digitalWrite ( ledHTTP, 0 );
 
 }
 
 
 void handleSystemRestart() {
-  //digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
@@ -266,16 +269,17 @@ void handleSystemRestart() {
   processStop();
 
   delay(5000);
+  digitalWrite ( ledHTTP, 0 );
 
-  //ESP.restart(); // For some reason the restart function isn't working.
-  while (1) { };   // Let's force the watchdog to restart eFlow.
+  ESP.restart(); // For some reason the restart function isn't working.
+  //while (1) { };   // Let's force the watchdog to restart eFlow.
 
 
 }
 
 
 void handleProcessData() {
-  //digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
 
@@ -302,10 +306,13 @@ void handleProcessData() {
 //    reflowStats.profile[processTimer].Setpoint = Setpoint;
 
   server.send ( 200, "text/csv", message );
+  digitalWrite ( ledHTTP, 0 );
 
 }
 
 void handleNotFound() {
+  digitalWrite ( ledHTTP, 1 );
+
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
@@ -321,11 +328,11 @@ void handleNotFound() {
 
 
   server.send ( 404, "text/plain", message );
-  //digitalWrite ( ledHTTP, 0 );
+  digitalWrite ( ledHTTP, 1 );
 }
 
 void handleCSS () {
-  //digitalWrite ( ledHTTP, 1 );
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
   message += F("@charset \"UTF-8\";\n");
@@ -403,12 +410,13 @@ void handleCSS () {
   server.sendHeader ( "Cache-Control", "public, max-age=31536000", 0 ); // 31536000 = 1 year
 
   server.send ( 200, "text/css", message );
-  //sendMime ( "text/css", message );
 
-  //digitalWrite ( ledHTTP, 0 );
+  digitalWrite ( ledHTTP, 0 );
 }
 
 void handleReflowNav() {
+  digitalWrite ( ledHTTP, 1 );
+
   String message = F("\n\n");
   message += F("<html>\n");
   message += F(" <head>\n");
@@ -425,7 +433,7 @@ void handleReflowNav() {
   message += F("  <a href=/process/start target=bottom>Start</a> | \n");
   message += F("  <a href=/process/stop target=bottom>Abort</a> | \n");
   message += F("  <a href=/process/chart target=bottom>Monitor Progress</a> | \n");
-  message += F("  <a href=/process/data.csv target=bottom>Data</a>\n");
+  message += F("  <a href=/process/data.csv target=bottom>Raw Data</a>\n");
   
   message += F("  </font>\n");
   message += F("  </td></tr></table>\n");
@@ -434,11 +442,13 @@ void handleReflowNav() {
 
 
   server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+  digitalWrite ( ledHTTP, 0 );
 }
 
 
 void handleBlank() {
+  digitalWrite ( ledHTTP, 1 );
+
   String message = "\n\n";
   message += "<html>\n";
   message += " <head>\n";
@@ -454,10 +464,13 @@ void handleBlank() {
 
 
   server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+
+  digitalWrite ( ledHTTP, 0 );
 }
 
 void handleReflowFrameset () {
+  digitalWrite ( ledHTTP, 1 );
+
   String message = "\n\n";
 
   message += "<html>\n";
@@ -469,9 +482,12 @@ void handleReflowFrameset () {
   message += "</frameset>\n";
 
   server.send( 200, "text/html", message );
+
+  digitalWrite ( ledHTTP, 0 );
 }
 
 void handleJSONSensors () {
+  digitalWrite ( ledHTTP, 1 );
 
   String message = "";
   message += "{\n";
@@ -491,9 +507,13 @@ void handleJSONSensors () {
 
   server.send ( 200, "application/json", message );
 
+  digitalWrite ( ledHTTP, 0 );
+
 }
 
 void handleReflowChart() {
+  digitalWrite ( ledHTTP, 1 );
+
   String message = "\n\n";
   message += "<html>\n";
   message += "<head>\n";
@@ -528,7 +548,6 @@ void handleReflowChart() {
 
   message += "</head>\n";
   message += "<body>\n";
-  //  message += "<h2>Current Process Conditions</h2>\n";
   message += "<form action='' method='post' name='chartForm' target='_self' id='chartForm'>\n";
   message += "  SensorA  <input name='sensorA' type='text' id='textfield13' size='5' maxlength='5' value=''/>\n";
   message += "  SensorB  <input name='sensorB' type='text' id='textfield13' size='5' maxlength='5' value=''/>\n";
@@ -552,30 +571,11 @@ void handleReflowChart() {
   message += "</table>\n";
 
   message += "<script type=\"text/javascript\">\n";
-//  message += "var nowMs = new Date().getTime();\n";
-
-//  message += "var windowHours = 8;\n";
-
   message += "g1 = new Dygraph(\n";
   message += "document.getElementById(\"graph_terrarium\"),\n";
   message += "\"/process/data.csv\",\n";
   message += "{\n";
   message += "legend: 'always',\n";
-/*
-  message += "connectSeparatedPoints: true,\n";
-  message += "//valueRange: [50,110],\n";
-  message += "showRangeSelector: true,\n";
-  message += "labels: ['date', 'Profile (c)', 'Actual (c)'],\n";
-  message += "ylabel: 'Profile (c)',\n";
-  
-  message += "y2label: 'Actual (c)',\n";
-  message += "\n";
-  message += "//showRoller: true,\n";
-
-  message += "'Actual (c)' : {\n";
-  message += "axis : { }\n";
-  message += "},\n";
-*/
   message += "}\n";
   message += ");\n";
   message += "\n";
@@ -592,6 +592,8 @@ void handleReflowChart() {
   message += "</body>\n";
   message += "</html>\n";
   server.send( 200, "text/html", message );
+
+  digitalWrite ( ledHTTP, 0 );
   
 }
 

@@ -28,6 +28,10 @@
 #include <EEPROM.h>
 #include "EEPROMAnything.h"
 
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
+
+
 // Configuration Start
 
 // These buttons are exposed on the nodemcu dev board
@@ -308,6 +312,26 @@ void setup() {
     Serial.println ( "HTTP server started" );
   }
 
+  ArduinoOTA.onStart([]() {
+    Serial.println("Start");
+  });
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nEnd");
+  });
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  });
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+  });
+  ArduinoOTA.begin();
+
+
 }
 
 void handleRoot2() {
@@ -330,6 +354,7 @@ void loop() {
   server.handleClient();
   dnsServer.processNextRequest();
 
+  ArduinoOTA.handle();
 
 
   if (deviceAdmin) {
@@ -344,7 +369,6 @@ void loop() {
         ledHTTPState = 1;
       }
       digitalWrite( ledCONNECTED, ledHTTPState );
-      //Serial.println ( WiFi.softAPIP() );
     }
 
     // If we've been in admin mode for 30 minutes, reboot ESP to get out of

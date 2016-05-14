@@ -349,7 +349,7 @@ void handleAdminRestart() {
 
   server.send( 200, "text/html", message );
 
-  ESP.reset();
+  ESP.restart();
 
   // This is here in the event ESP.reset doesn't work. This will trigger the watchdog.
   while (1) { };
@@ -363,7 +363,7 @@ void handleAdminApply() {
   message += " <head>\n";
   message += "  <meta name='viewport' content='initial-scale=1.5, user-scalable=no'>\n";
   message += "  <link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\">\n";
-  message += "  <title>Restarting...</title>\n";
+  message += "  <title>Saving settings to EEPROM...</title>\n";
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
   message += "</head>\n";
   message += "<body>\n";

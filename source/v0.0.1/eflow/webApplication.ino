@@ -261,8 +261,8 @@ void handleSystemRestart() {
 
   String message = "";
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
-  message += "<meta http-equiv=\"refresh\" content=\"20; url=/process/chart\">\n";
-  message += "Rebooting... This page will refresh in 20 seconds\n";
+  message += "<meta http-equiv=\"refresh\" content=\"10; url=/blank.html\">\n";
+  message += "Rebooting... This page will refresh in 10 seconds\n";
 
   server.send ( 200, "text/html", message );
 

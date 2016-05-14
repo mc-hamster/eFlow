@@ -110,7 +110,6 @@ void handleProcessConfigure() {
   }
   message += "    </select>\n";
   message += "  </p>\n";
-*/
   message += "  <h2>Modify Profile</h2>\n";
   message += "  <table width='100%' border='1' cellspacing='0' cellpadding='0'>\n";
   message += "    <tr>\n";
@@ -148,6 +147,7 @@ void handleProcessConfigure() {
   message += "    <input type='submit' name='button' id='button2' value='Apply' />\n";
   message += "  </p>\n";
   message += "</form>\n";
+*/
 
   message += "<form action='/process/conf/save/global' method='post' name='form1' target='_self' id='form1'>\n";
   message += "  <h1>Configure System</h2>\n";
@@ -458,6 +458,7 @@ void handleBlank() {
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
   message += "</head>\n";
   message += "<body>\n";
+  message += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>eFlow v0.0.1 (c) 2016 by Jm Casler\n";
 
   message += "</body>\n";
   message += "</html>\n";

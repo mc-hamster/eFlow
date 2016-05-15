@@ -1,19 +1,12 @@
 
-/***************************************************
-  This is an example for the Adafruit Thermocouple Sensor w/MAX31855K
-
-  Designed specifically to work with the Adafruit Thermocouple Sensor
-  ----> https://www.adafruit.com/products/269
-
-  These displays use SPI to communicate, 3 pins are required to
-  interface
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
- ****************************************************/
+/*
+ * License goes here
+ * 
+ * 
+ * 
+ *   /Users/jmcasler/Documents/CloudStation/projects/eflow/source/v0.0.2/eflow
+ *   curl -v -F file=\@eflow.ino.nodemcu.bin eflow.local/update
+ */
 
 #include <SPI.h>
 #include <PID_v1.h>
@@ -23,10 +16,13 @@
 #include <DNSServer.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266HTTPUpdateServer.h>
 #include <ESP8266mDNS.h>
 
 #include <EEPROM.h>
 #include "EEPROMAnything.h"
+
+#include <ESP8266HTTPUpdateServer.h>
 
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
@@ -60,8 +56,11 @@ struct settings_t
 
 int requestTTL = 120;
 
+const char* host = "eflow";
+
 const byte DNS_PORT = 53;
-ESP8266WebServer server ( 80 );
+ESP8266WebServer httpServer ( 80 );
+ESP8266HTTPUpdateServer httpUpdater;
 DNSServer dnsServer;
 
 boolean deviceAdmin = 0;
@@ -225,28 +224,36 @@ void setup() {
     Serial.println ( WiFi.softAPIP() );
     printAPMacAddress();
 
-    if ( MDNS.begin ( "eflow" ) ) {
+    if ( MDNS.begin ( host ) ) {
       Serial.println ( "MDNS responder started" );
+    } else {
+      Serial.println ( "MDNS responder NOT started" );
     }
 
     // We are using the amount of time required to connect to the AP as the seed to a random number generator.
     //   We should look for other ways to improve the seed. This should be "good enough" for now.
 
-    server.on ( "/", handleAdminFrameset );
-    server.on ( "/leftnav", handleAdminNav );
-    server.on ( "/conf/wifi", handleAdminConfWifi );
-    server.on ( "/conf/network", handleAdminConfNetwork );
-    server.on ( "/conf/accounts", handleAdminConfAccounts );
-    server.on ( "/conf/sensors", handleAdminConfSensors );
-    server.on ( "/system/defaults", handleAdminDefaults );
-    server.on ( "/system/settings", handleAdminSettings );
-    server.on ( "/system/restart", handleAdminRestart);
-    server.on ( "/system/apply", handleAdminApply);
-    server.on ( "/eflow.css", handleCSS);
+    httpServer.on ( "/", handleAdminFrameset );
+    httpServer.on ( "/leftnav", handleAdminNav );
+    httpServer.on ( "/conf/wifi", handleAdminConfWifi );
+    httpServer.on ( "/conf/network", handleAdminConfNetwork );
+    httpServer.on ( "/conf/accounts", handleAdminConfAccounts );
+    httpServer.on ( "/conf/sensors", handleAdminConfSensors );
+    httpServer.on ( "/system/defaults", handleAdminDefaults );
+    httpServer.on ( "/system/settings", handleAdminSettings );
+    httpServer.on ( "/system/restart", handleAdminRestart);
+    httpServer.on ( "/system/apply", handleAdminApply);
+    httpServer.on ( "/eflow.css", handleCSS);
 
-    server.onNotFound ( handleNotFound );
-    server.begin();
+    httpServer.onNotFound ( handleNotFound );
+
+    httpUpdater.setup(&httpServer);
+
+    httpServer.begin();
     Serial.println ( "HTTP server started" );
+
+    MDNS.addService("http", "tcp", 80);
+    Serial.printf("HTTPUpdateServer ready! Open http://%s.local/update in your browser\n", host);
 
   } else {
 
@@ -281,9 +288,12 @@ void setup() {
     Serial.println ( WiFi.localIP() );
     printMacAddress();
 
-    if ( MDNS.begin ( "eflow" ) ) {
+    if ( MDNS.begin ( host ) ) {
       Serial.println ( "MDNS responder started" );
+    } else {
+      Serial.println ( "MDNS responder NOT started" );
     }
+
 
     // We are using the amount of time required to connect to the AP as the seed to a random number generator.
     //   We should look for other ways to improve the seed. This should be "good enough" for now.
@@ -291,25 +301,32 @@ void setup() {
     secretRandNumber = random(2147483646); // Full range of long 2147483647
     Serial.println("Secret: " + String(secretRandNumber));
 
-    //server.on ( "/", handleRoot );
-    server.on ( "/", handleReflowFrameset );
-    server.on ( "/topnav", handleReflowNav );
-    server.on ( "/process/start", handleProcessStart );
-    server.on ( "/process/stop", handleProcessStop );
-    server.on ( "/process/conf", handleProcessConfigure );
-    server.on ( "/process/conf/save/global", handleProcessConfigureSaveGlobal );
-    server.on ( "/process/chart", handleReflowChart );
-    server.on ( "/process/data.csv", handleProcessData );
-    server.on ( "/restart", handleSystemRestart );
+    //httpServer.on ( "/", handleRoot );
+    httpServer.on ( "/", handleReflowFrameset );
+    httpServer.on ( "/topnav", handleReflowNav );
+    httpServer.on ( "/process/start", handleProcessStart );
+    httpServer.on ( "/process/stop", handleProcessStop );
+    httpServer.on ( "/process/conf", handleProcessConfigure );
+    httpServer.on ( "/process/conf/save/global", handleProcessConfigureSaveGlobal );
+    httpServer.on ( "/process/chart", handleReflowChart );
+    httpServer.on ( "/process/data.csv", handleProcessData );
+    httpServer.on ( "/restart", handleSystemRestart );
     
-    server.on ( "/externalScript.js", handleExternalScriptJS );
-    server.on ( "/json/sensors", handleJSONSensors );
-    server.on ( "/eflow.css", handleCSS);
-    server.on ( "/blank.html", handleBlank);
+    httpServer.on ( "/externalScript.js", handleExternalScriptJS );
+    httpServer.on ( "/json/sensors", handleJSONSensors );
+    httpServer.on ( "/eflow.css", handleCSS);
+    httpServer.on ( "/blank.html", handleBlank);
 
-    server.onNotFound ( handleNotFound );
-    server.begin();
+    httpServer.onNotFound ( handleNotFound );
+
+    httpUpdater.setup(&httpServer);
+
+    httpServer.begin();
     Serial.println ( "HTTP server started" );
+
+    MDNS.addService("http", "tcp", 80);
+    Serial.printf("HTTPUpdateServer ready! Open http://%s.local/update in your browser\n", host);
+    
   }
 
   ArduinoOTA.onStart([]() {
@@ -335,10 +352,13 @@ void setup() {
 }
 
 void handleRoot2() {
-  server.send(200, "text/plain", "hello from esp8266!");
+  httpServer.send(200, "text/plain", "hello from esp8266!");
 }
 
 void loop() {
+
+  ArduinoOTA.handle();
+  
 
   updateSensors();
 
@@ -351,10 +371,8 @@ void loop() {
   myPID.Compute();
 
   // Handle TCP Server
-  server.handleClient();
+  httpServer.handleClient();
   dnsServer.processNextRequest();
-
-  ArduinoOTA.handle();
 
 
   if (deviceAdmin) {

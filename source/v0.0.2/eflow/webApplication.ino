@@ -42,10 +42,10 @@ void handleExternalScriptJS() {
 
 
     // Define header to encourage browsers to cache this page.
-    server.sendHeader ( "ETag", "CacheThisForever", 0 );
-    server.sendHeader ( "Expires", "Mon, 08 Jun 2035 00:19:36 GMT", 0 );
-    server.sendHeader ( "Cache-Control", "public, max-age=31536000", 0 ); // 31536000 = 1 year
-    server.send ( 200, "text/plain", externJavascriptString );
+    httpServer.sendHeader ( "ETag", "CacheThisForever", 0 );
+    httpServer.sendHeader ( "Expires", "Mon, 08 Jun 2035 00:19:36 GMT", 0 );
+    httpServer.sendHeader ( "Cache-Control", "public, max-age=31536000", 0 ); // 31536000 = 1 year
+    httpServer.send ( 200, "text/plain", externJavascriptString );
   }
 
   digitalWrite ( ledHTTP, 0 );
@@ -59,7 +59,7 @@ void handleRoot() {
   String message = "";
   message += "Welcome to eFlow\n";
 
-  server.send ( 200, "text/html", message );
+  httpServer.send ( 200, "text/html", message );
   digitalWrite ( ledHTTP, 0 );
 
 }
@@ -73,7 +73,7 @@ void handleProcessStart() {
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
   message += "Reflow process has been initiated... This page will refresh\n";
 
-  server.send ( 200, "text/html", message );
+  httpServer.send ( 200, "text/html", message );
   digitalWrite ( ledHTTP, 0 );
   systemMessage = "eFlow Initiated";
 
@@ -202,7 +202,7 @@ void handleProcessConfigure() {
   message += "</html>\n";
 
 
-  server.send ( 200, "text/html", message );
+  httpServer.send ( 200, "text/html", message );
   digitalWrite ( ledHTTP, 0 );
 
   //processGo();
@@ -211,14 +211,14 @@ void handleProcessConfigure() {
 
 void handleProcessConfigureSaveGlobal() {
 
-  String inputKp = server.arg("Kp");
-  String inputKi = server.arg("Ki");
-  String inputKd = server.arg("Kd");
-  String inputStartupSec = server.arg("startup_sec");
-  String inputStartupTemp = server.arg("startup_temp");
-  String inputProcessAgressiveness = server.arg("processAgressiveness");
-  String inputProcessTempHysteresis = server.arg("processTempHysteresis");
-  String inputSafeTemperature = server.arg("safeTemperature");
+  String inputKp = httpServer.arg("Kp");
+  String inputKi = httpServer.arg("Ki");
+  String inputKd = httpServer.arg("Kd");
+  String inputStartupSec = httpServer.arg("startup_sec");
+  String inputStartupTemp = httpServer.arg("startup_temp");
+  String inputProcessAgressiveness = httpServer.arg("processAgressiveness");
+  String inputProcessTempHysteresis = httpServer.arg("processTempHysteresis");
+  String inputSafeTemperature = httpServer.arg("safeTemperature");
 
   Kp = inputKp.toFloat();
   Ki = inputKi.toFloat();
@@ -234,7 +234,7 @@ void handleProcessConfigureSaveGlobal() {
   message += "<meta http-equiv=\"refresh\" content=\"1; url=/process/conf\">\n";
   message += "Settings saved... This page will refresh\n";
 
-  server.send ( 200, "text/html", message );
+  httpServer.send ( 200, "text/html", message );
 }
 
 void handleProcessStop() {
@@ -245,7 +245,7 @@ void handleProcessStop() {
   message += "<meta http-equiv=\"refresh\" content=\"1; url=/process/chart\">\n";
   message += "Process aborted... This page will refresh\n";
 
-  server.send ( 200, "text/html", message );
+  httpServer.send ( 200, "text/html", message );
   digitalWrite ( ledHTTP, 0 );
 
   systemMessage = "eFlow Aborted";
@@ -264,7 +264,7 @@ void handleSystemRestart() {
   message += "<meta http-equiv=\"refresh\" content=\"10; url=/blank.html\">\n";
   message += "Rebooting... This page will refresh in 10 seconds\n";
 
-  server.send ( 200, "text/html", message );
+  httpServer.send ( 200, "text/html", message );
 
   processStop();
 
@@ -305,7 +305,7 @@ void handleProcessData() {
 //    reflowStats.profile[processTimer].sensorB = sensorB;
 //    reflowStats.profile[processTimer].Setpoint = Setpoint;
 
-  server.send ( 200, "text/csv", message );
+  httpServer.send ( 200, "text/csv", message );
   digitalWrite ( ledHTTP, 0 );
 
 }
@@ -315,19 +315,19 @@ void handleNotFound() {
 
   String message = "File Not Found\n\n";
   message += "URI: ";
-  message += server.uri();
+  message += httpServer.uri();
   message += "\nMethod: ";
-  message += ( server.method() == HTTP_GET ) ? "GET" : "POST";
+  message += ( httpServer.method() == HTTP_GET ) ? "GET" : "POST";
   message += "\nArguments: ";
-  message += server.args();
+  message += httpServer.args();
   message += "\n";
 
-  for ( uint8_t i = 0; i < server.args(); i++ ) {
-    message += " " + server.argName ( i ) + ": " + server.arg ( i ) + "\n";
+  for ( uint8_t i = 0; i < httpServer.args(); i++ ) {
+    message += " " + httpServer.argName ( i ) + ": " + httpServer.arg ( i ) + "\n";
   }
 
 
-  server.send ( 404, "text/plain", message );
+  httpServer.send ( 404, "text/plain", message );
   digitalWrite ( ledHTTP, 1 );
 }
 
@@ -405,11 +405,11 @@ void handleCSS () {
   message += F("background-color: #999933;\n");
   message += F("font-weight: bold;\n");
 
-  server.sendHeader ( "ETag", "CacheThisForever", 0 );
-  server.sendHeader ( "Expires", "Mon, 08 Jun 2035 00:19:36 GMT", 0 );
-  server.sendHeader ( "Cache-Control", "public, max-age=31536000", 0 ); // 31536000 = 1 year
+  httpServer.sendHeader ( "ETag", "CacheThisForever", 0 );
+  httpServer.sendHeader ( "Expires", "Mon, 08 Jun 2035 00:19:36 GMT", 0 );
+  httpServer.sendHeader ( "Cache-Control", "public, max-age=31536000", 0 ); // 31536000 = 1 year
 
-  server.send ( 200, "text/css", message );
+  httpServer.send ( 200, "text/css", message );
 
   digitalWrite ( ledHTTP, 0 );
 }
@@ -427,7 +427,7 @@ void handleReflowNav() {
   message += F("</head>\n");
   message += F("<body>\n");
 
-  message += F("  <table width='100%' height='100%' border='0' cellspacing='0' cellpadding='0'><tr><td width=200><font size=+3><b>eFlow v0.01</b></font></td><td align='center' valign='middle'>\n");
+  message += F("  <table width='100%' height='100%' border='0' cellspacing='0' cellpadding='0'><tr><td width=200><font size=+3><b>eFlow v0.0.3</b></font></td><td align='center' valign='middle'>\n");
   message += F("  <font size=+3>\n");
   message += F("  <a href=/process/conf target=bottom>Setup</a> | \n");
   message += F("  <a href=/process/start target=bottom>Start</a> | \n");
@@ -441,7 +441,7 @@ void handleReflowNav() {
   message += F("</html>\n");
 
 
-  server.send( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
   digitalWrite ( ledHTTP, 0 );
 }
 
@@ -458,13 +458,13 @@ void handleBlank() {
   message += "  <link rel=\"stylesheet\" href=\"/eflow.css\">\n";
   message += "</head>\n";
   message += "<body>\n";
-  message += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>eFlow v0.0.1 (c) 2016 by Jm Casler\n";
+  message += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>eFlow v0.0.2 (c) 2016 by Jm Casler\n";
 
   message += "</body>\n";
   message += "</html>\n";
 
 
-  server.send( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
 
   digitalWrite ( ledHTTP, 0 );
 }
@@ -482,7 +482,7 @@ void handleReflowFrameset () {
   message += "<frame name=bottom src=\"/blank.html\" />\n";
   message += "</frameset>\n";
 
-  server.send( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
 
   digitalWrite ( ledHTTP, 0 );
 }
@@ -506,7 +506,7 @@ void handleJSONSensors () {
   message += " \"status\" : \"ok\"\n";
   message += "}\n";
 
-  server.send ( 200, "application/json", message );
+  httpServer.send ( 200, "application/json", message );
 
   digitalWrite ( ledHTTP, 0 );
 
@@ -592,7 +592,7 @@ void handleReflowChart() {
 
   message += "</body>\n";
   message += "</html>\n";
-  server.send( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
 
   digitalWrite ( ledHTTP, 0 );
   

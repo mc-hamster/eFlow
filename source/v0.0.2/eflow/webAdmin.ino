@@ -29,21 +29,21 @@ void handleAdminNav() {
   message += "</html>\n";
 
 
-  server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
+  //  httpServer.send ( 200, "text/html", message );
 }
 
 void handleAdminConfAccounts() {
   boolean saved = 0;
 
-  if (server.arg("account_0") != "") {
+  if (httpServer.arg("account_0") != "") {
     saved = 1;
 
-    String account_0 = escapeParameter(server.arg("account_0"));
-    String account_1 = escapeParameter(server.arg("account_1"));
-    String account_2 = escapeParameter(server.arg("account_2"));
-    String account_3 = escapeParameter(server.arg("account_3"));
-    String account_4 = escapeParameter(server.arg("account_4"));
+    String account_0 = escapeParameter(httpServer.arg("account_0"));
+    String account_1 = escapeParameter(httpServer.arg("account_1"));
+    String account_2 = escapeParameter(httpServer.arg("account_2"));
+    String account_3 = escapeParameter(httpServer.arg("account_3"));
+    String account_4 = escapeParameter(httpServer.arg("account_4"));
 
   }
 
@@ -85,18 +85,18 @@ void handleAdminConfAccounts() {
   message += "</html>\n";
 
 
-  server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
+  //  httpServer.send ( 200, "text/html", message );
 }
 
 void handleAdminConfWifi() {
   boolean saved = 0;
 
-  if (server.arg("ssid") != "" && server.arg("ssidPassword") != "") {
+  if (httpServer.arg("ssid") != "" && httpServer.arg("ssidPassword") != "") {
     saved = 1;
 
-    String serverArgSsid = escapeParameter(server.arg("ssid"));
-    String serverArgSsidPassword = escapeParameter(server.arg("ssidPassword"));
+    String serverArgSsid = escapeParameter(httpServer.arg("ssid"));
+    String serverArgSsidPassword = escapeParameter(httpServer.arg("ssidPassword"));
 
     serverArgSsid.toCharArray(settings.ssid, 32);
     serverArgSsidPassword.toCharArray(settings.ssidPassword, 64);
@@ -152,8 +152,8 @@ void handleAdminConfWifi() {
   message += "</body>\n";
   message += "</html>\n";
 
-  server.send( 200, "text/html", message );
-  //server.send ( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
+  //httpServer.send ( 200, "text/html", message );
 }
 
 
@@ -161,25 +161,25 @@ void handleAdminConfNetwork() {
 
   boolean saved = 0;
 
-  if (server.arg("ipMode") != "") {
+  if (httpServer.arg("ipMode") != "") {
     saved = 1;
 
-    String ipMode = server.arg("ipMode");
+    String ipMode = httpServer.arg("ipMode");
 
-    String ip_0 = server.arg("ip_0");
-    String ip_1 = server.arg("ip_1");
-    String ip_2 = server.arg("ip_2");
-    String ip_3 = server.arg("ip_3");
+    String ip_0 = httpServer.arg("ip_0");
+    String ip_1 = httpServer.arg("ip_1");
+    String ip_2 = httpServer.arg("ip_2");
+    String ip_3 = httpServer.arg("ip_3");
 
-    String gateway_0 = server.arg("gateway_0");
-    String gateway_1 = server.arg("gateway_1");
-    String gateway_2 = server.arg("gateway_2");
-    String gateway_3 = server.arg("gateway_3");
+    String gateway_0 = httpServer.arg("gateway_0");
+    String gateway_1 = httpServer.arg("gateway_1");
+    String gateway_2 = httpServer.arg("gateway_2");
+    String gateway_3 = httpServer.arg("gateway_3");
 
-    String subnet_0 = server.arg("subnet_0");
-    String subnet_1 = server.arg("subnet_1");
-    String subnet_2 = server.arg("subnet_2");
-    String subnet_3 = server.arg("subnet_3");
+    String subnet_0 = httpServer.arg("subnet_0");
+    String subnet_1 = httpServer.arg("subnet_1");
+    String subnet_2 = httpServer.arg("subnet_2");
+    String subnet_3 = httpServer.arg("subnet_3");
 
     settings.ipMode = ipMode.toInt();
 
@@ -275,8 +275,8 @@ void handleAdminConfNetwork() {
   message += "</html>\n";
 
 
-  server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
+  //  httpServer.send ( 200, "text/html", message );
 }
 
 void handleAdminConfSensors() {
@@ -300,8 +300,8 @@ void handleAdminConfSensors() {
   message += "</html>\n";
 
 
-  server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
+  //  httpServer.send ( 200, "text/html", message );
 }
 
 
@@ -324,8 +324,8 @@ void handleAdminDefaults( void ) {
   message += "</body>\n";
   message += "</html>\n";
 
-  server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
+  //  httpServer.send ( 200, "text/html", message );
 
   //delay(250);
 
@@ -347,7 +347,7 @@ void handleAdminRestart() {
   message += "</body>\n";
   message += "</html>\n";
 
-  server.send( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
 
   ESP.restart();
 
@@ -383,8 +383,8 @@ void handleAdminApply() {
   // Reading the config back out is probably unnecessary, but it is good insurance.
   EEPROM_readAnything(0, settings);
 
-  server.send( 200, "text/html", message );
-  //  server.send ( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
+  //  httpServer.send ( 200, "text/html", message );
 
 }
 void handleAdminSettings () {
@@ -426,7 +426,7 @@ void handleAdminSettings () {
   message += "</body>\n";
   message += "</html>\n";
 
-  server.send( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
 }
 
 
@@ -439,5 +439,5 @@ void handleAdminFrameset () {
   message += "<frame name=right src=\"about:blank\" />\n";
   message += "</frameset>\n";
 
-  server.send( 200, "text/html", message );
+  httpServer.send( 200, "text/html", message );
 }
